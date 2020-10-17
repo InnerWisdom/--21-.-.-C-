@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Drawing;
+﻿using System.Drawing;
 
 namespace lab2
 {
@@ -86,7 +83,7 @@ base(maxSpeed, weight, mainColor, 100, 60)
 
 			}
 
-
+			//отрисовываем элементы locomotive
 			base.Draw(g);
 
 			if (HasUpperPipe)

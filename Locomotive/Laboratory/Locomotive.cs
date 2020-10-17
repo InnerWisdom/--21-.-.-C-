@@ -29,7 +29,7 @@ namespace lab2
 			switch (direction)
 			{
 				case Direction.Right:
-					if (_startPosX + step < _pictureWidth - carWidth)
+					if (_startPosX + step < _pictureWidth - carWidth-35)
 					{
 						_startPosX += step;
 					}
