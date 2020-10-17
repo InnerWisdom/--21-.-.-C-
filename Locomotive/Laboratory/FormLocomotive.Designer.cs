@@ -1,4 +1,4 @@
-﻿namespace lab1
+﻿namespace lab2
 {
     partial class FormLocomotive
     {
@@ -30,7 +30,8 @@
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormLocomotive));
             this.pictureBoxLocomotive = new System.Windows.Forms.PictureBox();
-            this.buttonCreate = new System.Windows.Forms.Button();
+            this.buttonCreateLocomotive = new System.Windows.Forms.Button();
+            this.buttonCreateElLocomotive = new System.Windows.Forms.Button();
             this.buttonLeft = new System.Windows.Forms.Button();
             this.buttonRight = new System.Windows.Forms.Button();
             this.buttonUp = new System.Windows.Forms.Button();
@@ -47,15 +48,25 @@
             this.pictureBoxLocomotive.TabIndex = 0;
             this.pictureBoxLocomotive.TabStop = false;
             // 
-            // buttonCreate
+            // buttonCreateLocomotive
             // 
-            this.buttonCreate.Location = new System.Drawing.Point(12, 12);
-            this.buttonCreate.Name = "buttonCreate";
-            this.buttonCreate.Size = new System.Drawing.Size(90, 30);
-            this.buttonCreate.TabIndex = 1;
-            this.buttonCreate.Text = "Создать";
-            this.buttonCreate.UseVisualStyleBackColor = true;
-            this.buttonCreate.Click += new System.EventHandler(this.buttonCreate_Click);
+            this.buttonCreateLocomotive.Location = new System.Drawing.Point(12, 12);
+            this.buttonCreateLocomotive.Name = "buttonCreateLocomotive";
+            this.buttonCreateLocomotive.Size = new System.Drawing.Size(120, 30);
+            this.buttonCreateLocomotive.TabIndex = 1;
+            this.buttonCreateLocomotive.Text = "Create Locomotive";
+            this.buttonCreateLocomotive.UseVisualStyleBackColor = true;
+            this.buttonCreateLocomotive.Click += new System.EventHandler(this.buttonCreateLocomotive_Click);
+            // 
+            // buttonCreateElLocomotive
+            // 
+            this.buttonCreateElLocomotive.Location = new System.Drawing.Point(142, 12);
+            this.buttonCreateElLocomotive.Name = "buttonCreateElLocomotive";
+            this.buttonCreateElLocomotive.Size = new System.Drawing.Size(140, 30);
+            this.buttonCreateElLocomotive.TabIndex = 1;
+            this.buttonCreateElLocomotive.Text = "Create ElLocomotive";
+            this.buttonCreateElLocomotive.UseVisualStyleBackColor = true;
+            this.buttonCreateElLocomotive.Click += new System.EventHandler(this.buttonCreateElLocomotive_Click);
             // 
             // buttonLeft
             // 
@@ -110,7 +121,8 @@
             this.Controls.Add(this.buttonUp);
             this.Controls.Add(this.buttonRight);
             this.Controls.Add(this.buttonLeft);
-            this.Controls.Add(this.buttonCreate);
+            this.Controls.Add(this.buttonCreateLocomotive);
+            this.Controls.Add(this.buttonCreateElLocomotive);
             this.Controls.Add(this.pictureBoxLocomotive);
             this.Name = "FormLocomotive";
             this.Text = "FormLocomotive";
@@ -122,7 +134,8 @@
         #endregion
 
         private System.Windows.Forms.PictureBox pictureBoxLocomotive;
-        private System.Windows.Forms.Button buttonCreate;
+        private System.Windows.Forms.Button buttonCreateLocomotive;
+        private System.Windows.Forms.Button buttonCreateElLocomotive;
         private System.Windows.Forms.Button buttonLeft;
         private System.Windows.Forms.Button buttonRight;
         private System.Windows.Forms.Button buttonUp;

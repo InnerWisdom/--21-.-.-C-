@@ -2,20 +2,28 @@
 using System.Drawing;
 using System.Windows.Forms;
 
-namespace lab1
+namespace lab2
 {
     public partial class FormLocomotive : Form
     {
-        private Locomotive locomotive;
+        private ITransport locomotive;
         public FormLocomotive()
         {
             InitializeComponent();
         }
 
-        private void buttonCreate_Click(object sender, EventArgs e)
+        private void buttonCreateLocomotive_Click(object sender, EventArgs e)
         {
             Random random = new Random();
-            locomotive = new Locomotive(random.Next(100, 300), random.Next(1000, 2000), Color.Green, Color.Red, true, true, true, true, true, true);
+            locomotive = new Locomotive(random.Next(100, 300), random.Next(1000, 2000), Color.Green);
+            locomotive.SetPosition(random.Next(10, 100), random.Next(10, 100), pictureBoxLocomotive.Width, pictureBoxLocomotive.Height);
+            Draw();
+        }
+        private void buttonCreateElLocomotive_Click(object sender, EventArgs e)
+        {
+            Random random = new Random();
+            locomotive = new ElLocomotive(random.Next(100, 300), random.Next(1000, 2000), Color.Green,
+                Color.Red, true, true, true, true, true, true);
             locomotive.SetPosition(random.Next(10, 100), random.Next(10, 100), pictureBoxLocomotive.Width, pictureBoxLocomotive.Height);
             Draw();
         }
@@ -28,16 +36,16 @@ namespace lab1
                 switch (name)
                 {
                     case "buttonUp":
-                        locomotive.MoveLocomotive(Direction.Up);
+                        locomotive.MoveTransport(Direction.Up);
                         break;
                     case "buttonDown":
-                        locomotive.MoveLocomotive(Direction.Down);
+                        locomotive.MoveTransport(Direction.Down);
                         break;
                     case "buttonLeft":
-                        locomotive.MoveLocomotive(Direction.Left);
+                        locomotive.MoveTransport(Direction.Left);
                         break;
                     case "buttonRight":
-                        locomotive.MoveLocomotive(Direction.Right);
+                        locomotive.MoveTransport(Direction.Right);
                         break;
                 }
                 Draw();
@@ -48,7 +56,7 @@ namespace lab1
         {
             Bitmap map = new Bitmap(pictureBoxLocomotive.Width, pictureBoxLocomotive.Height);
             Graphics g = Graphics.FromImage(map);
-            locomotive.DrawLocomotive(g);
+            locomotive.Draw(g);
             pictureBoxLocomotive.Image = map;
         }
     }

@@ -1,7 +1,7 @@
 using System;
 using System.Windows.Forms;
 
-namespace lab1
+namespace lab2
 {
     static class Program
     {
