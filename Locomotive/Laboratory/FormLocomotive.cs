@@ -2,7 +2,7 @@
 using System.Drawing;
 using System.Windows.Forms;
 
-namespace lab1
+namespace lab2
 {
     public partial class FormLocomotive : Form
     {

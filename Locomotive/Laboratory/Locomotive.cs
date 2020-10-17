@@ -1,6 +1,6 @@
 ﻿using System.Drawing;
 
-namespace lab1
+namespace lab2
 {
 	class Locomotive
 	{
