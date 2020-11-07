@@ -1,6 +1,6 @@
 ﻿using System.Drawing;
 
-namespace lab2
+namespace lab3
 {
 	public class Locomotive : Vehicle
 	{

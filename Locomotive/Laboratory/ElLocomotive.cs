@@ -1,19 +1,15 @@
 ﻿using System.Drawing;
 
-namespace lab2
+namespace lab3
 {
 	public class ElLocomotive : Locomotive
 	{
 		public Color DopColor { private set; get; }
 		public bool HasFrontBumper { private set; get; }
-
 		public bool HasFirstHorn { private set; get; }
-
 		public bool HasSecondHorn { private set; get; }
-
 		public bool HasThirdHorn { private set; get; }
 		public bool HasUpperPipe { private set; get; }
-
 		public bool HasBackLine { private set; get; }
 
 		public ElLocomotive(int maxSpeed, float weight, Color mainColor, Color dopColor,
@@ -91,6 +87,5 @@ base(maxSpeed, weight, mainColor, 100, 60)
 				g.FillEllipse(br, _startPosX + 20, _startPosY - 4, 100, 6);
 			}
 		}
-
 	}
 }

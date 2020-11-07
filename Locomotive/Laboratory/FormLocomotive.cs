@@ -2,7 +2,7 @@
 using System.Drawing;
 using System.Windows.Forms;
 
-namespace lab2
+namespace lab3
 {
     public partial class FormLocomotive : Form
     {
@@ -19,6 +19,7 @@ namespace lab2
             locomotive.SetPosition(random.Next(10, 100), random.Next(10, 100), pictureBoxLocomotive.Width, pictureBoxLocomotive.Height);
             Draw();
         }
+
         private void buttonCreateElLocomotive_Click(object sender, EventArgs e)
         {
             Random random = new Random();
@@ -50,6 +51,11 @@ namespace lab2
                 }
                 Draw();
             }
+        }
+        public void SetLocomotive(ITransport locomotive)
+        {
+            this.locomotive = locomotive;
+            Draw();
         }
 
         private void Draw()
