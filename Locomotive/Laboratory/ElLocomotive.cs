@@ -87,6 +87,5 @@ base(maxSpeed, weight, mainColor, 100, 60)
 				g.FillEllipse(br, _startPosX + 20, _startPosY - 4, 100, 6);
 			}
 		}
-
 	}
 }

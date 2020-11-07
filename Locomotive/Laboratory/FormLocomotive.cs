@@ -19,6 +19,7 @@ namespace lab3
             locomotive.SetPosition(random.Next(10, 100), random.Next(10, 100), pictureBoxLocomotive.Width, pictureBoxLocomotive.Height);
             Draw();
         }
+
         private void buttonCreateElLocomotive_Click(object sender, EventArgs e)
         {
             Random random = new Random();
@@ -56,6 +57,7 @@ namespace lab3
             this.locomotive = locomotive;
             Draw();
         }
+
         private void Draw()
         {
             Bitmap map = new Bitmap(pictureBoxLocomotive.Width, pictureBoxLocomotive.Height);
