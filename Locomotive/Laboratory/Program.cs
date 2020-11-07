@@ -1,7 +1,7 @@
 using System;
 using System.Windows.Forms;
 
-namespace lab2
+namespace lab3
 {
     static class Program
     {
@@ -14,7 +14,7 @@ namespace lab2
             Application.SetHighDpiMode(HighDpiMode.SystemAware);
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new FormLocomotive());
+            Application.Run(new FormDepo());
         }
     }
 }

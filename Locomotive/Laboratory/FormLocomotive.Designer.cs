@@ -1,4 +1,4 @@
-﻿namespace lab2
+﻿namespace lab3
 {
     partial class FormLocomotive
     {

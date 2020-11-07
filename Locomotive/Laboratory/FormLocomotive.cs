@@ -2,7 +2,7 @@
 using System.Drawing;
 using System.Windows.Forms;
 
-namespace lab2
+namespace lab3
 {
     public partial class FormLocomotive : Form
     {
@@ -51,7 +51,11 @@ namespace lab2
                 Draw();
             }
         }
-
+        public void SetLocomotive(ITransport locomotive)
+        {
+            this.locomotive = locomotive;
+            Draw();
+        }
         private void Draw()
         {
             Bitmap map = new Bitmap(pictureBoxLocomotive.Width, pictureBoxLocomotive.Height);
