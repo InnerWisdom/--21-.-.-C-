@@ -2,7 +2,7 @@
 using System.Drawing;
 using System.Windows.Forms;
 
-namespace lab3
+namespace lab4
 {
     public partial class FormLocomotive : Form
     {
@@ -52,6 +52,7 @@ namespace lab3
                 Draw();
             }
         }
+
         public void SetLocomotive(ITransport locomotive)
         {
             this.locomotive = locomotive;

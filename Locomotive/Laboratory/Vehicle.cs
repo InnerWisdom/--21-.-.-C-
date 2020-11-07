@@ -1,6 +1,6 @@
 ﻿using System.Drawing;
 
-namespace lab3
+namespace lab4
 {
 	public abstract class Vehicle : ITransport
 	{
