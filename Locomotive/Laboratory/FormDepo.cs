@@ -4,88 +4,78 @@ using System.Windows.Forms;
 
 namespace lab4
 {
-	public partial class FormDepos : Form
+	public partial class FormDepo : Form
 	{
 		private readonly DepoCollection depoCollection;
 
 		private PictureBox pictureBoxDepo;
 		private GroupBox groupBoxDepo;
 		private Button buttonTakeLocomotive;
-		private Label label1;
+		private Label labelPlace;
 		private MaskedTextBox maskedTextBox;
 
 		private Button buttonSetLocomotive;
-		private Button buttonSetElLocomotive;
-		private ListBox listBoxDepos;
+		private ListBox listBoxDepo;
 		private Button buttonAddDepo;
 		private Button buttonDelDepo;
-		private Label label2;
-		private TextBox textBoxNewDepoName;
+		private Label labelDepo;
+		private TextBox textBoxNewLevelName;
 
-		public FormDepos()
+		public FormDepo()
 		{
 			InitializeComponent();
 			depoCollection = new DepoCollection(pictureBoxDepo.Width, pictureBoxDepo.Height);
+			Draw();
 		}
 
 		private void ReloadLevels()
 		{
-			int index = listBoxDepos.SelectedIndex;
-
-			listBoxDepos.Items.Clear();
+			int index = listBoxDepo.SelectedIndex;
+			listBoxDepo.Items.Clear();
 			for (int i = 0; i < depoCollection.Keys.Count; i++)
 			{
-				listBoxDepos.Items.Add(depoCollection.Keys[i]);
+				listBoxDepo.Items.Add(depoCollection.Keys[i]);
 			}
-
-			if (listBoxDepos.Items.Count > 0 && (index == -1 || index >= listBoxDepos.Items.Count))
+			if (listBoxDepo.Items.Count > 0 && (index == -1 || index >= listBoxDepo.Items.Count))
 			{
-				listBoxDepos.SelectedIndex = 0;
+				listBoxDepo.SelectedIndex = 0;
 			}
-			else if (listBoxDepos.Items.Count > 0 && index > -1 && index < listBoxDepos.Items.Count)
+			else if (listBoxDepo.Items.Count > 0 && index > -1 && index < listBoxDepo.Items.Count)
 			{
-				listBoxDepos.SelectedIndex = index;
+				listBoxDepo.SelectedIndex = index;
 			}
 		}
 
 		private void Draw() 
 		{
-			Bitmap bmp = new Bitmap(pictureBoxDepo.Width, pictureBoxDepo.Height);
-			Graphics gr = Graphics.FromImage(bmp);
-			if (listBoxDepos.SelectedIndex > -1)
-			{
-				depoCollection[listBoxDepos.SelectedItem.ToString()].Draw(gr);
+			if (listBoxDepo.SelectedIndex > -1)
+			{//если выбран один из пуктов в listBox (при старте программы ни один пункт не будет выбран и может возникнуть ошибка, если мы попытаемся обратиться к элементу listBox)
+				Bitmap bmp = new Bitmap(pictureBoxDepo.Width, pictureBoxDepo.Height);
+				Graphics gr = Graphics.FromImage(bmp);
+				depoCollection[listBoxDepo.SelectedItem.ToString()].Draw(gr);
+				pictureBoxDepo.Image = bmp;
 			}
-			else
-			{
-				gr.FillRectangle(new SolidBrush(Color.Transparent), 0, 0, pictureBoxDepo.Width, pictureBoxDepo.Height);
-			}
-			pictureBoxDepo.Image = bmp;
 		}
 
 		private void buttonAddDepo_Click(object sender, EventArgs e)
 		{
-			if (!string.IsNullOrEmpty(textBoxNewDepoName.Text))
-			{
-				depoCollection.AddDepo(textBoxNewDepoName.Text);
-				ReloadLevels();
-				Draw();
-			}
-			else
+			if (string.IsNullOrEmpty(textBoxNewLevelName.Text))
 			{
 				MessageBox.Show("Введите название депо", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+				return;
 			}
+			depoCollection.AddDepo(textBoxNewLevelName.Text);
+			ReloadLevels();
 		}
 
 		private void buttonDelDepo_Click(object sender, EventArgs e)
 		{
-			if (listBoxDepos.SelectedIndex > -1)
+			if (listBoxDepo.SelectedIndex > -1)
 			{
-				if (MessageBox.Show($"Удалить депо {listBoxDepos.SelectedItem.ToString()}?", "Удаление", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+				if (MessageBox.Show($"Удалить депо {listBoxDepo.SelectedItem.ToString()}?", "Удаление", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
 				{
-					depoCollection.DelDepo(listBoxDepos.SelectedItem.ToString());
+					depoCollection.DelParking(listBoxDepo.SelectedItem.ToString());
 					ReloadLevels();
-					Draw();
 				}
 			}
 		}
@@ -93,9 +83,9 @@ namespace lab4
 
 		private void buttonTakeLocomotive_Click(object sender, EventArgs e)
 		{
-			if (listBoxDepos.SelectedIndex > -1 && maskedTextBox.Text != "")
+			if (listBoxDepo.SelectedIndex > -1 && maskedTextBox.Text != "")
 			{
-				var locomotive = depoCollection[listBoxDepos.SelectedItem.ToString()] - Convert.ToInt32(maskedTextBox.Text);
+				var locomotive = depoCollection[listBoxDepo.SelectedItem.ToString()] - Convert.ToInt32(maskedTextBox.Text);
 				if (locomotive != null)
 				{
 					FormLocomotive form = new FormLocomotive();
@@ -108,65 +98,45 @@ namespace lab4
 
 		private void buttonSetLocomotive_Click(object sender, EventArgs e)
 		{
-			if (listBoxDepos.SelectedIndex > -1)
+			var locomotiveConfig = new LocomotiveConfig();
+			locomotiveConfig.AddEvent(AddLocomotive);
+			locomotiveConfig.Show();
+		}
+
+		private void AddLocomotive(Vehicle locomotive)
+		{
+			if (locomotive != null && listBoxDepo.SelectedIndex > -1)
 			{
-				ColorDialog dialog = new ColorDialog();
-				if (dialog.ShowDialog() == DialogResult.OK)
+				if ((depoCollection[listBoxDepo.SelectedItem.ToString()]) + locomotive)
 				{
-					var locomotive = new Locomotive(100, 1000, dialog.Color);
-					if (depoCollection[listBoxDepos.SelectedItem.ToString()] + locomotive)
-					{
-						Draw();
-					}
-					else
-					{
-						MessageBox.Show("Депо переполнено");
-					}
+					Draw();
+				}
+				else
+				{
+					MessageBox.Show("Локомотив не удалось поставить");
 				}
 			}
 		}
-		private void listBoxParkings_SelectedIndexChanged(object sender, EventArgs e)
+
+		private void listBoxDepo_SelectedIndexChanged(object sender, EventArgs e)
 		{
 			Draw();
 		}
-		private void buttonSetElLocomotive_Click_1(object sender, EventArgs e)
-		{
-			if (listBoxDepos.SelectedIndex > -1)
-			{
-				ColorDialog dialog = new ColorDialog();
-				if (dialog.ShowDialog() == DialogResult.OK)
-				{
-					ColorDialog dialogDop = new ColorDialog();
-					if (dialogDop.ShowDialog() == DialogResult.OK)
-					{
-						var locomotive = new ElLocomotive(100, 1000, dialog.Color, dialogDop.Color, true, true, true, true, true, true);
-						if (depoCollection[listBoxDepos.SelectedItem.ToString()] + locomotive)
-						{
-							Draw();
-						}
-						else
-						{
-							MessageBox.Show("Депо переполнено");
-						}
-					}
-				}
-			}
-		}
+		
 
 		private void InitializeComponent()
 		{
 			this.pictureBoxDepo = new System.Windows.Forms.PictureBox();
 			this.groupBoxDepo = new System.Windows.Forms.GroupBox();
 			this.buttonTakeLocomotive = new System.Windows.Forms.Button();
-			this.label1 = new System.Windows.Forms.Label();
+			this.labelPlace = new System.Windows.Forms.Label();
 			this.maskedTextBox = new System.Windows.Forms.MaskedTextBox();
 			this.buttonSetLocomotive = new System.Windows.Forms.Button();
-			this.buttonSetElLocomotive = new System.Windows.Forms.Button();
-			this.listBoxDepos = new System.Windows.Forms.ListBox();
+			this.listBoxDepo = new System.Windows.Forms.ListBox();
 			this.buttonAddDepo = new System.Windows.Forms.Button();
 			this.buttonDelDepo = new System.Windows.Forms.Button();
-			this.textBoxNewDepoName = new System.Windows.Forms.TextBox();
-			this.label2 = new System.Windows.Forms.Label();
+			this.textBoxNewLevelName = new System.Windows.Forms.TextBox();
+			this.labelDepo = new System.Windows.Forms.Label();
 			((System.ComponentModel.ISupportInitialize)(this.pictureBoxDepo)).BeginInit();
 			this.groupBoxDepo.SuspendLayout();
 			this.SuspendLayout();
@@ -179,37 +149,39 @@ namespace lab4
 			this.pictureBoxDepo.Size = new System.Drawing.Size(944, 561);
 			this.pictureBoxDepo.TabIndex = 0;
 			this.pictureBoxDepo.TabStop = false;
+			this.pictureBoxDepo.Click += new System.EventHandler(this.pictureBoxDepo_Click);
 			// 
 			// groupBoxDepo
 			// 
 			this.groupBoxDepo.Controls.Add(this.buttonTakeLocomotive);
-			this.groupBoxDepo.Controls.Add(this.label1);
+			this.groupBoxDepo.Controls.Add(this.labelPlace);
 			this.groupBoxDepo.Controls.Add(this.maskedTextBox);
 			this.groupBoxDepo.Location = new System.Drawing.Point(811, 407);
 			this.groupBoxDepo.Name = "groupBoxDepo";
-			this.groupBoxDepo.Size = new System.Drawing.Size(125, 106);
+			this.groupBoxDepo.Size = new System.Drawing.Size(125, 86);
 			this.groupBoxDepo.TabIndex = 11;
 			this.groupBoxDepo.TabStop = false;
 			this.groupBoxDepo.Text = "Забрать состав";
+			this.groupBoxDepo.Enter += new System.EventHandler(this.groupBoxDepo_Enter);
 			// 
 			// buttonTakeLocomotive
 			// 
 			this.buttonTakeLocomotive.Location = new System.Drawing.Point(29, 66);
 			this.buttonTakeLocomotive.Name = "buttonTakeLocomotive";
-			this.buttonTakeLocomotive.Size = new System.Drawing.Size(72, 29);
+			this.buttonTakeLocomotive.Size = new System.Drawing.Size(72, 19);
 			this.buttonTakeLocomotive.TabIndex = 2;
 			this.buttonTakeLocomotive.Text = "Забрать";
 			this.buttonTakeLocomotive.UseVisualStyleBackColor = true;
 			this.buttonTakeLocomotive.Click += new System.EventHandler(this.buttonTakeLocomotive_Click);
 			// 
-			// label1
+			// labelPlace
 			// 
-			this.label1.AutoSize = true;
-			this.label1.Location = new System.Drawing.Point(27, 36);
-			this.label1.Name = "label1";
-			this.label1.Size = new System.Drawing.Size(39, 13);
-			this.label1.TabIndex = 1;
-			this.label1.Text = "Место";
+			this.labelPlace.AutoSize = true;
+			this.labelPlace.Location = new System.Drawing.Point(27, 36);
+			this.labelPlace.Name = "labelPlace";
+			this.labelPlace.Size = new System.Drawing.Size(39, 13);
+			this.labelPlace.TabIndex = 1;
+			this.labelPlace.Text = "Место";
 			// 
 			// maskedTextBox
 			// 
@@ -217,6 +189,7 @@ namespace lab4
 			this.maskedTextBox.Name = "maskedTextBox";
 			this.maskedTextBox.Size = new System.Drawing.Size(28, 20);
 			this.maskedTextBox.TabIndex = 0;
+			this.maskedTextBox.MaskInputRejected += new System.Windows.Forms.MaskInputRejectedEventHandler(this.maskedTextBox_MaskInputRejected);
 			// 
 			// buttonSetLocomotive
 			// 
@@ -228,24 +201,14 @@ namespace lab4
 			this.buttonSetLocomotive.UseVisualStyleBackColor = true;
 			this.buttonSetLocomotive.Click += new System.EventHandler(this.buttonSetLocomotive_Click);
 			// 
-			// buttonSetElLocomotive
+			// listBoxDepo
 			// 
-			this.buttonSetElLocomotive.Location = new System.Drawing.Point(811, 324);
-			this.buttonSetElLocomotive.Name = "buttonSetElLocomotive";
-			this.buttonSetElLocomotive.Size = new System.Drawing.Size(125, 39);
-			this.buttonSetElLocomotive.TabIndex = 13;
-			this.buttonSetElLocomotive.Text = "Создать электровоз";
-			this.buttonSetElLocomotive.UseVisualStyleBackColor = true;
-			this.buttonSetElLocomotive.Click += new System.EventHandler(this.buttonSetElLocomotive_Click_1);
-			// 
-			// listBoxDepos
-			// 
-			this.listBoxDepos.FormattingEnabled = true;
-			this.listBoxDepos.Location = new System.Drawing.Point(810, 93);
-			this.listBoxDepos.Name = "listBoxDepos";
-			this.listBoxDepos.Size = new System.Drawing.Size(126, 121);
-			this.listBoxDepos.TabIndex = 14;
-			this.listBoxDepos.SelectedIndexChanged += new System.EventHandler(this.listBoxParkings_SelectedIndexChanged);
+			this.listBoxDepo.FormattingEnabled = true;
+			this.listBoxDepo.Location = new System.Drawing.Point(810, 93);
+			this.listBoxDepo.Name = "listBoxDepo";
+			this.listBoxDepo.Size = new System.Drawing.Size(126, 121);
+			this.listBoxDepo.TabIndex = 14;
+			this.listBoxDepo.SelectedIndexChanged += new System.EventHandler(this.listBoxDepo_SelectedIndexChanged);
 			// 
 			// buttonAddDepo
 			// 
@@ -267,31 +230,30 @@ namespace lab4
 			this.buttonDelDepo.UseVisualStyleBackColor = true;
 			this.buttonDelDepo.Click += new System.EventHandler(this.buttonDelDepo_Click);
 			// 
-			// textBoxNewDepoName
+			// textBoxNewLevelName
 			// 
-			this.textBoxNewDepoName.Location = new System.Drawing.Point(820, 22);
-			this.textBoxNewDepoName.Name = "textBoxNewDepoName";
-			this.textBoxNewDepoName.Size = new System.Drawing.Size(103, 20);
-			this.textBoxNewDepoName.TabIndex = 17;
+			this.textBoxNewLevelName.Location = new System.Drawing.Point(820, 22);
+			this.textBoxNewLevelName.Name = "textBoxNewLevelName";
+			this.textBoxNewLevelName.Size = new System.Drawing.Size(103, 20);
+			this.textBoxNewLevelName.TabIndex = 17;
 			// 
-			// label2
+			// labelDepo
 			// 
-			this.label2.AutoSize = true;
-			this.label2.Location = new System.Drawing.Point(843, 5);
-			this.label2.Name = "label2";
-			this.label2.Size = new System.Drawing.Size(60, 13);
-			this.label2.TabIndex = 18;
-			this.label2.Text = "Депо:";
+			this.labelDepo.AutoSize = true;
+			this.labelDepo.Location = new System.Drawing.Point(843, 5);
+			this.labelDepo.Name = "labelDepo";
+			this.labelDepo.Size = new System.Drawing.Size(37, 13);
+			this.labelDepo.TabIndex = 18;
+			this.labelDepo.Text = "Депо:";
 			// 
 			// FormDepo
 			// 
 			this.ClientSize = new System.Drawing.Size(944, 561);
-			this.Controls.Add(this.label2);
-			this.Controls.Add(this.textBoxNewDepoName);
+			this.Controls.Add(this.labelDepo);
+			this.Controls.Add(this.textBoxNewLevelName);
 			this.Controls.Add(this.buttonDelDepo);
 			this.Controls.Add(this.buttonAddDepo);
-			this.Controls.Add(this.listBoxDepos);
-			this.Controls.Add(this.buttonSetElLocomotive);
+			this.Controls.Add(this.listBoxDepo);
 			this.Controls.Add(this.buttonSetLocomotive);
 			this.Controls.Add(this.groupBoxDepo);
 			this.Controls.Add(this.pictureBoxDepo);
@@ -303,6 +265,22 @@ namespace lab4
 			this.PerformLayout();
 
 		}
-	
+
+		private void groupBoxDepo_Enter(object sender, EventArgs e)
+		{
+
+		}
+
+		private void maskedTextBox_MaskInputRejected(object sender, MaskInputRejectedEventArgs e)
+		{
+
+		}
+
+		private void pictureBoxDepo_Click(object sender, EventArgs e)
+		{
+
+		}
+
+		
 	}
 }

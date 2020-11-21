@@ -1,60 +1,71 @@
-﻿using System.Drawing;
+﻿using System;
+using System.Collections.Generic;
+using System.Drawing;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace lab4
 {
 	/// <summary>     /// Параметризованный класс для хранения набора объектов от интерфейса ITransport     /// </summary>     /// <typeparam name="T"></typeparam> 
 	public class Depo<T> where T : class, ITransport
-	{    
-		private readonly T[] _places;        
-		private readonly int pictureWidth;     
-		private readonly int pictureHeight;  
-		private readonly int _placeSizeWidth = 310;     
-		private readonly int _placeSizeHeight = 100;
+	{         /// <summary>         /// Массив объектов, которые храним         /// </summary>         
+		private readonly List<T> _places;
 
+		private readonly int _maxCount;
+
+		/// <summary>         /// Ширина окна отрисовки         /// </summary>         
+		private readonly int pictureWidth;
+
+		/// <summary>         /// Высота окна отрисовки         /// </summary>         
+		private readonly int pictureHeight;
+
+		/// <summary>         /// Размер парковочного места (ширина)         /// </summary>         
+		private readonly int _placeSizeWidth = 310;
+
+		/// <summary>         /// Размер парковочного места (высота)         /// </summary>         
+		private readonly int _placeSizeHeight = 100;
 		public Depo(int picWidth, int picHeight)
 		{
 			this.pictureWidth = picWidth;
 			this.pictureHeight = picHeight;
 			int width = picWidth / _placeSizeWidth;
 			int height = picHeight / _placeSizeHeight;
-			_places = new T[width * height];
+			_maxCount = width * height;
+			_places = new List<T>();
 			
 		}
 
+
 		public static bool operator +(Depo<T> p, T ElLocomotive)
 		{
-			int margin = 45;
-			int rowsCount = p.pictureHeight / p._placeSizeHeight;
-			for (int i = 0; i < p._places.Length; i++)
+			if (p._places.Count >= p._maxCount)
 			{
-				if (p._places[i] == null)
-				{
-					ElLocomotive.SetPosition(margin-25 + p._placeSizeWidth * (i / rowsCount), margin + p._placeSizeHeight * (i % rowsCount),
-						p.pictureWidth, p.pictureHeight);
-					p._places[i] = ElLocomotive;
-					return true;
-				}
+				return false;
 			}
-			return false;
+			p._places.Add(ElLocomotive);
+			return true;
 		}
+
 
 		public static T operator -(Depo<T> p, int index)
 		{
-			if (index >= 0 && index < p._places.Length && p._places[index] != null)
+			if (index < -1 || index > p._places.Count)
 			{
-				T temp = p._places[index];
-				p._places[index] = null;
-				return temp;
+				return null;
 			}
-			return null;
+			T locomotive = p._places[index];
+			p._places.RemoveAt(index);
+			return locomotive ;
 		}
 
 		public void Draw(Graphics g)
 		{
 			DrawMarking(g);
-			for (int i = 0; i < _places.Length; i++)
+			for (int i = 0; i < _places.Count; ++i)
 			{
-				_places[i]?.Draw(g);
+				_places[i].SetPosition(5 + i / 5 * _placeSizeWidth + 15, i % 5 * _placeSizeHeight+40, pictureWidth, pictureHeight);
+				_places[i].DrawTransport(g);
 			}
 		}
 

@@ -1,10 +1,7 @@
-﻿namespace lab4
+﻿public enum Direction
 {
-    public enum Direction
-    {
-        Up,
-        Right,
-        Down,
-        Left
-    }
+	Up,
+	Down,
+	Left,
+	Right,
 }
