@@ -1,4 +1,5 @@
-﻿using System;
+﻿using NLog;
+using System;
 using System.Drawing; 
 using System.Windows.Forms; 
 
@@ -13,6 +14,8 @@ namespace lab4
 		private Button buttonTakeLocomotive;
 		private Label labelPlace;
 		private MaskedTextBox maskedTextBox;
+
+		private readonly Logger logger;
 
 		private Button buttonSetLocomotive;
 		private ListBox listBoxDepo;
@@ -33,7 +36,7 @@ namespace lab4
 		{
 			InitializeComponent();
 			depoCollection = new DepoCollection(pictureBoxDepo.Width, pictureBoxDepo.Height);
-			Draw();
+			logger = LogManager.GetCurrentClassLogger();
 		}
 
 		private void ReloadLevels()
@@ -72,6 +75,7 @@ namespace lab4
 				MessageBox.Show("Введите название депо", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
 				return;
 			}
+			logger.Info($"Добавили депо {textBoxNewLevelName.Text}");
 			depoCollection.AddDepo(textBoxNewLevelName.Text);
 			ReloadLevels();
 		}
@@ -82,6 +86,7 @@ namespace lab4
 			{
 				if (MessageBox.Show($"Удалить депо {listBoxDepo.SelectedItem.ToString()}?", "Удаление", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
 				{
+					logger.Info($"Удалили парковку{ listBoxDepo.SelectedItem.ToString()}");
 					depoCollection.DelParking(listBoxDepo.SelectedItem.ToString());
 					ReloadLevels();
 				}
@@ -92,13 +97,18 @@ namespace lab4
 		{
 			if (saveFileDialog.ShowDialog() == DialogResult.OK)
 			{
-				if (depoCollection.SaveData(saveFileDialog.FileName))
+				try
 				{
-					MessageBox.Show("Сохранение прошло успешно", "Результат", MessageBoxButtons.OK, MessageBoxIcon.Information);
+					depoCollection.SaveData(saveFileDialog.FileName);
+					MessageBox.Show("Сохранение прошло успешно", "Результат",
+					MessageBoxButtons.OK, MessageBoxIcon.Information);
+					logger.Info("Сохранено в файл " + saveFileDialog.FileName);
 				}
-				else
+				catch (Exception ex)
 				{
-					MessageBox.Show("Не сохранилось", "Результат", MessageBoxButtons.OK, MessageBoxIcon.Error);
+					logger.Warn("Неизвестная ошибка при сохранении" + ex.Message);
+					MessageBox.Show(ex.Message, "Неизвестная ошибка при сохранении",
+					MessageBoxButtons.OK, MessageBoxIcon.Error);
 				}
 			}
 		}
@@ -107,15 +117,26 @@ namespace lab4
 		{
 			if (openFileDialog1.ShowDialog() == DialogResult.OK)
 			{
-				if (depoCollection.LoadData(openFileDialog1.FileName))
+				try
 				{
-					MessageBox.Show("Загрузили", "Результат", MessageBoxButtons.OK, MessageBoxIcon.Information);
+					depoCollection.LoadData(openFileDialog1.FileName);
+					MessageBox.Show("Загрузили", "Результат", MessageBoxButtons.OK,
+					MessageBoxIcon.Information);
+					logger.Info("Загружено из файла " + openFileDialog1.FileName);
 					ReloadLevels();
 					Draw();
 				}
-				else
+				catch (DepoOverflowException ex)
 				{
-					MessageBox.Show("Не загрузили", "Результат", MessageBoxButtons.OK, MessageBoxIcon.Error);
+					logger.Warn("Занятое место" + ex.Message);
+					MessageBox.Show(ex.Message, "Занятое место", MessageBoxButtons.OK,
+					MessageBoxIcon.Error);
+				}
+				catch (Exception ex)
+				{
+					logger.Warn("Неизвестная ошибка при сохранении" + ex.Message);
+					MessageBox.Show(ex.Message, "Неизвестная ошибка при сохранении",
+					MessageBoxButtons.OK, MessageBoxIcon.Error);
 				}
 			}
 		}
@@ -124,14 +145,33 @@ namespace lab4
 		{
 			if (listBoxDepo.SelectedIndex > -1 && maskedTextBox.Text != "")
 			{
-				var locomotive = depoCollection[listBoxDepo.SelectedItem.ToString()] - Convert.ToInt32(maskedTextBox.Text);
-				if (locomotive != null)
+				try
 				{
-					FormLocomotive form = new FormLocomotive();
-					form.SetLocomotive(locomotive);
-					form.ShowDialog();
+					var locomotive = depoCollection[listBoxDepo.SelectedItem.ToString()] - Convert.ToInt32(maskedTextBox.Text);
+					if (locomotive != null)
+					{
+						FormLocomotive form = new FormLocomotive();
+						form.SetLocomotive(locomotive);
+						form.ShowDialog();
+						logger.Info($"Изъят локомотив {locomotive} с места{ maskedTextBox.Text}");
+
+					}
+					Draw();
 				}
-				Draw();
+				catch (DepoNotFoundException ex)
+				{
+					logger.Warn("Не найдено депо" + ex.Message);
+					MessageBox.Show(ex.Message, "Не найдено депо", MessageBoxButtons.OK,
+					MessageBoxIcon.Error);
+				}
+				catch (Exception ex)
+				{
+					logger.Warn("Неизвестная ошибка" + ex.Message);
+					MessageBox.Show(ex.Message, "Неизвестная ошибка",
+					MessageBoxButtons.OK, MessageBoxIcon.Error);
+				}
+
+
 			}
 		}
 
@@ -146,19 +186,41 @@ namespace lab4
 		{
 			if (locomotive != null && listBoxDepo.SelectedIndex > -1)
 			{
-				if ((depoCollection[listBoxDepo.SelectedItem.ToString()]) + locomotive)
+				try
 				{
+					if ((depoCollection[listBoxDepo.SelectedItem.ToString()]) +
+				   locomotive)
+					{
+						Draw();
+						logger.Info($"Добавлен локомотив {locomotive}");
+					}
+					else
+					{
+						logger.Warn("Локомотив не удалось поставить");
+						MessageBox.Show("Локомотив не удалось поставить");
+					}
 					Draw();
 				}
-				else
+				catch (DepoOverflowException ex)
 				{
-					MessageBox.Show("Локомотив не удалось поставить");
+					logger.Warn("Переполнение" + ex.Message);
+					MessageBox.Show(ex.Message, "Переполнение", MessageBoxButtons.OK,
+					MessageBoxIcon.Error);
+				}
+				catch (Exception ex)
+				{
+					logger.Warn("Неизвестная ошибка" + ex.Message);
+					MessageBox.Show(ex.Message, "Неизвестная ошибка",
+					MessageBoxButtons.OK, MessageBoxIcon.Error);
 				}
 			}
+
 		}
 
 		private void listBoxDepo_SelectedIndexChanged(object sender, EventArgs e)
 		{
+			logger.Info($"Перешли к депо{ listBoxDepo.SelectedItem.ToString()}");
+
 			Draw();
 		}
 
