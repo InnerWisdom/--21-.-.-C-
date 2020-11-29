@@ -1,4 +1,5 @@
-﻿using System.Drawing;
+﻿using System;
+using System.Drawing;
 
 namespace lab4
 {
@@ -6,6 +7,7 @@ namespace lab4
 	{
 		protected readonly int locomotiveWidth = 90;
 		protected readonly int locomotiveHeight = 50;
+		protected readonly char separator = ';';
 		public Locomotive(int maxSpeed, float weight, Color mainColor)
 		{
 			MaxSpeed = maxSpeed;
@@ -20,6 +22,18 @@ namespace lab4
 			this.locomotiveWidth = carWidth;
 			this.locomotiveHeight = carHeight;
 		}
+
+		public Locomotive(string info)
+		{
+			string[] strs = info.Split(separator);
+			if (strs.Length == 3)
+			{
+				MaxSpeed = Convert.ToInt32(strs[0]);
+				Weight = Convert.ToInt32(strs[1]);
+				MainColor = Color.FromName(strs[2]);
+			}
+		}
+
 		public override void MoveTransport(Direction direction)
 		{
 			float step = MaxSpeed * 100 / Weight;
@@ -78,7 +92,10 @@ namespace lab4
 			g.FillEllipse(br_wheels, _startPosX + 113, _startPosY + 40, 10, 10);
 			g.FillEllipse(br_wheels, _startPosX - 3, _startPosY + 38, 135, 10);
 		}
+		public override string ToString()
+		{
+			return $"{MaxSpeed}{separator}{Weight}{separator}{MainColor.Name}";
+		}
 
-		
 	}
 }

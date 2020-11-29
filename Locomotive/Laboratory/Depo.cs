@@ -7,81 +7,92 @@ using System.Threading.Tasks;
 
 namespace lab4
 {
-	/// <summary>     /// Параметризованный класс для хранения набора объектов от интерфейса ITransport     /// </summary>     /// <typeparam name="T"></typeparam> 
-	public class Depo<T> where T : class, ITransport
-	{         /// <summary>         /// Массив объектов, которые храним         /// </summary>         
+    /// <summary>     /// Параметризованный класс для хранения набора объектов от интерфейса ITransport     /// </summary>     /// <typeparam name="T"></typeparam> 
+    public class Depo<T> where T : class, ITransport
+    {         /// <summary>         /// Массив объектов, которые храним         /// </summary>         
 		private readonly List<T> _places;
 
-		private readonly int _maxCount;
+        private readonly int _maxCount;
 
-		/// <summary>         /// Ширина окна отрисовки         /// </summary>         
-		private readonly int pictureWidth;
+        /// <summary>         /// Ширина окна отрисовки         /// </summary>         
+        private readonly int pictureWidth;
 
-		/// <summary>         /// Высота окна отрисовки         /// </summary>         
-		private readonly int pictureHeight;
+        /// <summary>         /// Высота окна отрисовки         /// </summary>         
+        private readonly int pictureHeight;
 
-		/// <summary>         /// Размер парковочного места (ширина)         /// </summary>         
-		private readonly int _placeSizeWidth = 310;
+        /// <summary>         /// Размер парковочного места (ширина)         /// </summary>         
+        private readonly int _placeSizeWidth = 310;
 
-		/// <summary>         /// Размер парковочного места (высота)         /// </summary>         
-		private readonly int _placeSizeHeight = 100;
-		public Depo(int picWidth, int picHeight)
-		{
-			this.pictureWidth = picWidth;
-			this.pictureHeight = picHeight;
-			int width = picWidth / _placeSizeWidth;
-			int height = picHeight / _placeSizeHeight;
-			_maxCount = width * height;
-			_places = new List<T>();
-			
-		}
+        /// <summary>         /// Размер парковочного места (высота)         /// </summary>         
+        private readonly int _placeSizeHeight = 100;
+        public Depo(int picWidth, int picHeight)
+        {
+            this.pictureWidth = picWidth;
+            this.pictureHeight = picHeight;
+            int width = picWidth / _placeSizeWidth;
+            int height = picHeight / _placeSizeHeight;
+            _maxCount = width * height;
+            _places = new List<T>();
 
-
-		public static bool operator +(Depo<T> p, T ElLocomotive)
-		{
-			if (p._places.Count >= p._maxCount)
-			{
-				return false;
-			}
-			p._places.Add(ElLocomotive);
-			return true;
-		}
+        }
 
 
-		public static T operator -(Depo<T> p, int index)
-		{
-			if (index < -1 || index > p._places.Count)
-			{
-				return null;
-			}
-			T locomotive = p._places[index];
-			p._places.RemoveAt(index);
-			return locomotive ;
-		}
+        public static bool operator +(Depo<T> p, T ElLocomotive)
+        {
+            if (p._places.Count >= p._maxCount)
+            {
+                return false;
+            }
+            p._places.Add(ElLocomotive);
+            return true;
+        }
 
-		public void Draw(Graphics g)
-		{
-			DrawMarking(g);
-			for (int i = 0; i < _places.Count; ++i)
-			{
-				_places[i].SetPosition(5 + i / 5 * _placeSizeWidth + 15, i % 5 * _placeSizeHeight+40, pictureWidth, pictureHeight);
-				_places[i].DrawTransport(g);
-			}
-		}
 
-		private void DrawMarking(Graphics g)
-		{
-			Pen pen = new Pen(Color.Black, 3);
+        public static T operator -(Depo<T> p, int index)
+        {
+            if (index < -1 || index > p._places.Count)
+            {
+                return null;
+            }
+            T locomotive = p._places[index];
+            p._places.RemoveAt(index);
+            return locomotive;
+        }
 
-			for (int i = 0; i < pictureWidth / _placeSizeWidth; i++)
-			{
-				for (int j = 0; j < pictureHeight / _placeSizeHeight + 1; ++j)
-				{
-					g.DrawLine(pen, i * _placeSizeWidth, (j) * _placeSizeHeight, i * _placeSizeWidth + _placeSizeWidth / 2, (j )* _placeSizeHeight);                 } 
+        public void Draw(Graphics g)
+        {
+            DrawMarking(g);
+            for (int i = 0; i < _places.Count; ++i)
+            {
+                _places[i].SetPosition(5 + i / 5 * _placeSizeWidth + 15, i % 5 * _placeSizeHeight + 40, pictureWidth, pictureHeight);
+                _places[i].DrawTransport(g);
+            }
+        }
 
-					g.DrawLine(pen, i * _placeSizeWidth, 0, i * _placeSizeWidth, (pictureHeight / _placeSizeHeight) * _placeSizeHeight);
-				}
-			}
-		}
+        private void DrawMarking(Graphics g)
+        {
+            Pen pen = new Pen(Color.Black, 3);
 
-	}
+            for (int i = 0; i < pictureWidth / _placeSizeWidth; i++)
+            {
+                for (int j = 0; j < pictureHeight / _placeSizeHeight + 1; ++j)
+                {
+                    g.DrawLine(pen, i * _placeSizeWidth, (j) * _placeSizeHeight, i * _placeSizeWidth + _placeSizeWidth / 2, (j) * _placeSizeHeight);
+                }
+
+                g.DrawLine(pen, i * _placeSizeWidth, 0, i * _placeSizeWidth, (pictureHeight / _placeSizeHeight) * _placeSizeHeight);
+            }
+        }
+
+        public T GetNext(int index)
+        {
+            if (index < 0 || index >= _places.Count)
+            {
+                return null;
+            }
+            return _places[index];
+        }
+    }
+
+
+}
