@@ -92,7 +92,6 @@ namespace lab4
 			}
 			ReloadLevels();
 			Draw();
-			
 		}
 
 		private void toolStripMenuItem1_Click(object sender, EventArgs e)
