@@ -36,12 +36,11 @@ namespace lab4
 
         }
 
-
         public static bool operator +(Depo<T> p, T ElLocomotive)
         {
             if (p._places.Count >= p._maxCount)
             {
-                return false;
+                throw new DepoOverflowException();
             }
             p._places.Add(ElLocomotive);
             return true;
@@ -52,7 +51,7 @@ namespace lab4
         {
             if (index < -1 || index > p._places.Count)
             {
-                return null;
+                throw new DepoNotFoundException(index);
             }
             T locomotive = p._places[index];
             p._places.RemoveAt(index);
@@ -93,6 +92,5 @@ namespace lab4
             return _places[index];
         }
     }
-
 
 }
