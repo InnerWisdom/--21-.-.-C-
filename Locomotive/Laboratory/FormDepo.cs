@@ -1,7 +1,7 @@
 ﻿using NLog;
 using System;
 using System.Drawing; 
-using System.Windows.Forms; 
+using System.Windows.Forms;
 
 namespace lab4
 {
@@ -15,7 +15,7 @@ namespace lab4
 		private Label labelPlace;
 		private MaskedTextBox maskedTextBox;
 
-		private readonly Logger logger;
+		readonly Logger logger = NLog.Web.NLogBuilder.ConfigureNLog("nlog.config").GetCurrentClassLogger();
 
 		private Button buttonSetLocomotive;
 		private ListBox listBoxDepo;
@@ -86,11 +86,13 @@ namespace lab4
 			{
 				if (MessageBox.Show($"Удалить депо {listBoxDepo.SelectedItem.ToString()}?", "Удаление", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
 				{
-					logger.Info($"Удалили парковку{ listBoxDepo.SelectedItem.ToString()}");
-					depoCollection.DelParking(listBoxDepo.SelectedItem.ToString());
-					ReloadLevels();
+					logger.Info($"Удалили депо{ listBoxDepo.SelectedItem.ToString()}");
+					depoCollection.DelDepo(listBoxDepo.SelectedItem.ToString());
 				}
 			}
+			ReloadLevels();
+			Draw();
+			
 		}
 
 		private void toolStripMenuItem1_Click(object sender, EventArgs e)
@@ -156,7 +158,6 @@ namespace lab4
 						logger.Info($"Изъят локомотив {locomotive} с места{ maskedTextBox.Text}");
 
 					}
-					Draw();
 				}
 				catch (DepoNotFoundException ex)
 				{
@@ -173,6 +174,9 @@ namespace lab4
 
 
 			}
+
+			ReloadLevels();
+			Draw();
 		}
 
 		private void buttonSetLocomotive_Click(object sender, EventArgs e)

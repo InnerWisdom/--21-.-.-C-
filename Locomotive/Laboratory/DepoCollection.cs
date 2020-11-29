@@ -35,7 +35,7 @@ namespace lab4
 			depoStages.Add(name, new Depo<Vehicle>(pictureWidth, pictureHeight));
 		}
 
-		public void DelParking(string ind)
+		public void DelDepo(string ind)
 		{
 			if (depoStages.ContainsKey(ind))
 			{
