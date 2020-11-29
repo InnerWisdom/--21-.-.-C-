@@ -59,7 +59,6 @@ namespace lab4
 				gr.FillRectangle(new SolidBrush(Color.Transparent), 0, 0, pictureBoxDepo.Width, pictureBoxDepo.Height);
 			}
 			pictureBoxDepo.Image = bmp;
-
 		}
 
 		private void buttonAddDepo_Click(object sender, EventArgs e)
