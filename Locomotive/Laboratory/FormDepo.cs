@@ -46,15 +46,19 @@ namespace lab4
 			}
 		}
 
-		private void Draw() 
+		private void Draw()
 		{
+			Bitmap bmp = new Bitmap(pictureBoxDepo.Width, pictureBoxDepo.Height);
+			Graphics gr = Graphics.FromImage(bmp);
 			if (listBoxDepo.SelectedIndex > -1)
-			{//если выбран один из пуктов в listBox (при старте программы ни один пункт не будет выбран и может возникнуть ошибка, если мы попытаемся обратиться к элементу listBox)
-				Bitmap bmp = new Bitmap(pictureBoxDepo.Width, pictureBoxDepo.Height);
-				Graphics gr = Graphics.FromImage(bmp);
+			{
 				depoCollection[listBoxDepo.SelectedItem.ToString()].Draw(gr);
-				pictureBoxDepo.Image = bmp;
 			}
+			else
+			{
+				gr.FillRectangle(new SolidBrush(Color.Transparent), 0, 0, pictureBoxDepo.Width, pictureBoxDepo.Height);
+			}
+			pictureBoxDepo.Image = bmp;
 		}
 
 		private void buttonAddDepo_Click(object sender, EventArgs e)
