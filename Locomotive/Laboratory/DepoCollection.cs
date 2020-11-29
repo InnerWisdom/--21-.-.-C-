@@ -1,46 +1,51 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace lab4
 {
 	class DepoCollection
 	{
-		readonly Dictionary<string, Depo<Vehicle>> depoStages;
+		readonly Dictionary<string, Depo<Vehicle>> parkingStages;
 
-		public List<string> Keys => depoStages.Keys.ToList();
+		public List<string> Keys => parkingStages.Keys.ToList();
+
 		private readonly int pictureWidth;
+
 		private readonly int pictureHeight;
 
 		public DepoCollection(int pictureWidth, int pictureHeight)
 		{
-			depoStages = new Dictionary<string, Depo<Vehicle>>();
+			parkingStages = new Dictionary<string, Depo<Vehicle>>();
 			this.pictureWidth = pictureWidth;
 			this.pictureHeight = pictureHeight;
 		}
 
 		public void AddDepo(string name)
 		{
-			if (depoStages.ContainsKey(name))
+			if (parkingStages.ContainsKey(name))
 			{
 				return;
 			}
-			depoStages.Add(name, new Depo<Vehicle>(pictureWidth, pictureHeight));
+			parkingStages.Add(name, new Depo<Vehicle>(pictureWidth, pictureHeight));
 		}
 
-		public void DelDepo(string ind)
+		public void DelParking(string ind)
 		{
-			if (depoStages.ContainsKey(ind))
+			if (parkingStages.ContainsKey(ind))
 			{
-				depoStages.Remove(ind);
+				parkingStages.Remove(ind);
 			}
 		}
 
 		public Depo<Vehicle> this[string ind]
 		{
 			get {
-				if (depoStages.ContainsKey(ind))
+				if (parkingStages.ContainsKey(ind))
 				{
-					return depoStages[ind];
+					return parkingStages[ind];
 				}
 				return null;
 			}
