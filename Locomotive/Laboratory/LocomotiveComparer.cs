@@ -2,9 +2,9 @@
 
 namespace lab4
 {
-    class LocomotiveComparer : IComparer<ElLocomotive>
+    class LocomotiveComparer : IComparer<Vehicle>
     {
-        public int Compare(ElLocomotive x, ElLocomotive y)
+        public int Compare(Vehicle x, Vehicle y)
         {
             if (x is ElLocomotive && y is ElLocomotive)
             {

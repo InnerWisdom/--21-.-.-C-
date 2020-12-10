@@ -1,6 +1,6 @@
 ﻿using NLog;
 using System;
-using System.Drawing; 
+using System.Drawing;
 using System.Windows.Forms;
 
 namespace lab4
@@ -21,6 +21,7 @@ namespace lab4
 		private ListBox listBoxDepo;
 		private Button buttonAddDepo;
 		private Button buttonDelDepo;
+		private Button buttonSortLocomotives;
 		private Label labelDepo;
 		private TextBox textBoxNewLevelName;
 
@@ -57,7 +58,7 @@ namespace lab4
 			}
 		}
 
-		private void Draw() 
+		private void Draw()
 		{
 			Bitmap bmp = new Bitmap(pictureBoxDepo.Width, pictureBoxDepo.Height);
 			Graphics gr = Graphics.FromImage(bmp);
@@ -98,7 +99,7 @@ namespace lab4
 			Draw();
 		}
 
-		private void saveToolStripMenuItem_Click(object sender, EventArgs e)
+		private void toolStripMenuItem1_Click(object sender, EventArgs e)
 		{
 			if (saveDepoDialog.ShowDialog() == DialogResult.OK)
 			{
@@ -112,13 +113,13 @@ namespace lab4
 				catch (Exception ex)
 				{
 					logger.Warn("Неизвестная ошибка при сохранении" + ex.Message);
-					MessageBox .Show(ex.Message, "Неизвестная ошибка при сохранении",
+					MessageBox.Show(ex.Message, "Неизвестная ошибка при сохранении",
 					MessageBoxButtons.OK, MessageBoxIcon.Error);
 				}
 			}
 		}
 
-		private void llo(object sender, EventArgs e)
+		private void toolStripMenuItem1ToolStripMenuItem_Click(object sender, EventArgs e)
 		{
 			if (loadDepoDialog.ShowDialog() == DialogResult.OK)
 			{
@@ -231,6 +232,15 @@ namespace lab4
 			Draw();
 		}
 
+		private void buttonSort_Click(object sender, EventArgs e)
+		{
+			if (listBoxDepo.SelectedIndex > -1)
+			{
+				depoCollection[listBoxDepo.SelectedItem.ToString()].Sort();
+				Draw();
+				logger.Info("Сортировка уровней");
+			}
+		}
 
 		private void InitializeComponent()
 		{
@@ -242,6 +252,7 @@ namespace lab4
 			this.pictureBoxDepo = new System.Windows.Forms.PictureBox();
 			this.groupBoxDepo = new System.Windows.Forms.GroupBox();
 			this.buttonTakeLocomotive = new System.Windows.Forms.Button();
+			this.buttonSortLocomotives = new System.Windows.Forms.Button();
 			this.labelPlace = new System.Windows.Forms.Label();
 			this.maskedTextBox = new System.Windows.Forms.MaskedTextBox();
 			this.buttonSetLocomotive = new System.Windows.Forms.Button();
@@ -288,6 +299,16 @@ namespace lab4
 			this.buttonTakeLocomotive.Text = "Забрать";
 			this.buttonTakeLocomotive.UseVisualStyleBackColor = true;
 			this.buttonTakeLocomotive.Click += new System.EventHandler(this.buttonTakeLocomotive_Click);
+			// 
+			// buttonSortLocomotives
+			// 
+			this.buttonSortLocomotives.Location = new System.Drawing.Point(822, 350);
+			this.buttonSortLocomotives.Name = "buttonTakeLocomotive";
+			this.buttonSortLocomotives.Size = new System.Drawing.Size(72, 19);
+			this.buttonSortLocomotives.TabIndex = 2;
+			this.buttonSortLocomotives.Text = "Сортировка";
+			this.buttonSortLocomotives.UseVisualStyleBackColor = true;
+			this.buttonSortLocomotives.Click += new System.EventHandler(this.buttonSort_Click);
 			// 
 			// saveDepoDialog
 			//
@@ -409,11 +430,13 @@ namespace lab4
 			this.Controls.Add(this.buttonAddDepo);
 			this.Controls.Add(this.listBoxDepo);
 			this.Controls.Add(this.buttonSetLocomotive);
+
+			this.Controls.Add(this.buttonSortLocomotives);
 			this.Controls.Add(this.groupBoxDepo);
 			this.Controls.Add(this.pictureBoxDepo);
 
-			this.saveToolStripMenuItem.Click += new System.EventHandler(this.saveToolStripMenuItem_Click);
-			this.loadToolStripMenuItem.Click += new System.EventHandler(this.loa);
+			this.saveToolStripMenuItem.Click += new System.EventHandler(this.toolStripMenuItem1_Click);
+			this.loadToolStripMenuItem.Click += new System.EventHandler(this.toolStripMenuItem1ToolStripMenuItem_Click);
 
 
 			this.Controls.Add(this.depoMenuStrip);
