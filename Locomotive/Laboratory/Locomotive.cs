@@ -66,7 +66,7 @@ namespace lab4
 					break;
 			}
 		}
-		public override void DrawTransport(Graphics g)
+		public override void DrawLocomotive(Graphics g)
 		{
 			Pen pen = new Pen(Color.Black);
 			Brush br_main = new SolidBrush(MainColor);

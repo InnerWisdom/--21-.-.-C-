@@ -58,7 +58,7 @@ base(maxSpeed, weight, mainColor, 100, 60)
             }
         }
 
-        public override void DrawTransport(Graphics g)
+        public override void DrawLocomotive(Graphics g)
         {
 
             Pen pen = new Pen(Color.Black);
@@ -111,7 +111,7 @@ base(maxSpeed, weight, mainColor, 100, 60)
             }
 
 
-            base.DrawTransport(g);
+            base.DrawLocomotive(g);
 
             if (UpperPipe)
             {

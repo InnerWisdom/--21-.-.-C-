@@ -62,7 +62,7 @@ namespace lab4
         {
             Bitmap map = new Bitmap(pictureBoxLocomotive.Width, pictureBoxLocomotive.Height);
             Graphics g = Graphics.FromImage(map);
-            locomotive.DrawTransport(g);
+            locomotive.DrawLocomotive(g);
             pictureBoxLocomotive.Image = map;
         }
     }

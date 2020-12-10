@@ -24,13 +24,13 @@ namespace lab4
 		private Label labelDepo;
 		private TextBox textBoxNewLevelName;
 
-		private System.Windows.Forms.SaveFileDialog saveFileDialog;
-		private System.Windows.Forms.OpenFileDialog openFileDialog1;
+		private System.Windows.Forms.SaveFileDialog saveDepoDialog;
+		private System.Windows.Forms.OpenFileDialog loadDepoDialog;
 
-		private System.Windows.Forms.MenuStrip menuStrip1;
-		private System.Windows.Forms.ToolStripMenuItem файлToolStripMenuItem;
-		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem1;
-		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem1ToolStripMenuItem;
+		private System.Windows.Forms.MenuStrip depoMenuStrip;
+		private System.Windows.Forms.ToolStripMenuItem fileToolStripMenuItem;
+		private System.Windows.Forms.ToolStripMenuItem saveToolStripMenuItem;
+		private System.Windows.Forms.ToolStripMenuItem loadToolStripMenuItem;
 
 		public FormDepo()
 		{
@@ -98,36 +98,36 @@ namespace lab4
 			Draw();
 		}
 
-		private void toolStripMenuItem1_Click(object sender, EventArgs e)
+		private void saveToolStripMenuItem_Click(object sender, EventArgs e)
 		{
-			if (saveFileDialog.ShowDialog() == DialogResult.OK)
+			if (saveDepoDialog.ShowDialog() == DialogResult.OK)
 			{
 				try
 				{
-					depoCollection.SaveData(saveFileDialog.FileName);
+					depoCollection.SaveData(saveDepoDialog.FileName);
 					MessageBox.Show("Сохранение прошло успешно", "Результат",
 					MessageBoxButtons.OK, MessageBoxIcon.Information);
-					logger.Info("Сохранено в файл " + saveFileDialog.FileName);
+					logger.Info("Сохранено в файл " + saveDepoDialog.FileName);
 				}
 				catch (Exception ex)
 				{
 					logger.Warn("Неизвестная ошибка при сохранении" + ex.Message);
-					MessageBox.Show(ex.Message, "Неизвестная ошибка при сохранении",
+					MessageBox .Show(ex.Message, "Неизвестная ошибка при сохранении",
 					MessageBoxButtons.OK, MessageBoxIcon.Error);
 				}
 			}
 		}
 
-		private void toolStripMenuItem1ToolStripMenuItem_Click(object sender, EventArgs e)
+		private void llo(object sender, EventArgs e)
 		{
-			if (openFileDialog1.ShowDialog() == DialogResult.OK)
+			if (loadDepoDialog.ShowDialog() == DialogResult.OK)
 			{
 				try
 				{
-					depoCollection.LoadData(openFileDialog1.FileName);
+					depoCollection.LoadData(loadDepoDialog.FileName);
 					MessageBox.Show("Загрузили", "Результат", MessageBoxButtons.OK,
 					MessageBoxIcon.Information);
-					logger.Info("Загружено из файла " + openFileDialog1.FileName);
+					logger.Info("Загружено из файла " + loadDepoDialog.FileName);
 					ReloadLevels();
 					Draw();
 				}
@@ -235,10 +235,10 @@ namespace lab4
 		private void InitializeComponent()
 		{
 
-			this.menuStrip1 = new System.Windows.Forms.MenuStrip();
-			this.файлToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
-			this.toolStripMenuItem1ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.depoMenuStrip = new System.Windows.Forms.MenuStrip();
+			this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.saveToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.loadToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.pictureBoxDepo = new System.Windows.Forms.PictureBox();
 			this.groupBoxDepo = new System.Windows.Forms.GroupBox();
 			this.buttonTakeLocomotive = new System.Windows.Forms.Button();
@@ -249,11 +249,11 @@ namespace lab4
 			this.buttonAddDepo = new System.Windows.Forms.Button();
 			this.buttonDelDepo = new System.Windows.Forms.Button();
 			this.textBoxNewLevelName = new System.Windows.Forms.TextBox();
-			this.menuStrip1.SuspendLayout();
+			this.depoMenuStrip.SuspendLayout();
 			this.labelDepo = new System.Windows.Forms.Label();
 
-			this.saveFileDialog = new System.Windows.Forms.SaveFileDialog();
-			this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
+			this.saveDepoDialog = new System.Windows.Forms.SaveFileDialog();
+			this.loadDepoDialog = new System.Windows.Forms.OpenFileDialog();
 			((System.ComponentModel.ISupportInitialize)(this.pictureBoxDepo)).BeginInit();
 			this.groupBoxDepo.SuspendLayout();
 			this.SuspendLayout();
@@ -289,41 +289,43 @@ namespace lab4
 			this.buttonTakeLocomotive.UseVisualStyleBackColor = true;
 			this.buttonTakeLocomotive.Click += new System.EventHandler(this.buttonTakeLocomotive_Click);
 			// 
-			// saveFileDialog
+			// saveDepoDialog
 			//
-			this.saveFileDialog.Filter = "txt file | *.txt";
+			this.saveDepoDialog.Filter = "txt file | *.txt";
 			// 
-			// menuStrip1
+			// depoMenuStrip
 			// 
-			this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-			this.файлToolStripMenuItem});
-			this.menuStrip1.Location = new System.Drawing.Point(0, 0);
-			this.menuStrip1.Name = "menuStrip1";
-			this.menuStrip1.Size = new System.Drawing.Size(687, 24);
-			this.menuStrip1.TabIndex = 7;
-			this.menuStrip1.Text = "menuStrip1";
+			this.depoMenuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+			this.fileToolStripMenuItem});
+			this.depoMenuStrip.Location = new System.Drawing.Point(0, 0);
+			this.depoMenuStrip.Name = "menuStrip1";
+			this.depoMenuStrip.Size = new System.Drawing.Size(687, 24);
+			this.depoMenuStrip.TabIndex = 7;
+			this.depoMenuStrip.Text = "menuStrip1";
 			// 
-			// файлToolStripMenuItem
+			// fileToolStripMenuItem
 			// 
-			this.файлToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-			this.toolStripMenuItem1,
-			this.toolStripMenuItem1ToolStripMenuItem});
-			this.файлToolStripMenuItem.Name = "файлToolStripMenuItem";
-			this.файлToolStripMenuItem.Size = new System.Drawing.Size(48, 20);
-			this.файлToolStripMenuItem.Text = "Файл";
+			this.fileToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+			this.saveToolStripMenuItem,
+			this.loadToolStripMenuItem});
+			this.fileToolStripMenuItem.Name = "файлToolStripMenuItem";
+			this.fileToolStripMenuItem.Size = new System.Drawing.Size(48, 20);
+			this.fileToolStripMenuItem.Text = "Файл";
 			// 
-			// toolStripMenuItem1
+			// saveToolStripMenuItem
 			// 
-			this.toolStripMenuItem1.ImageAlign = System.Drawing.ContentAlignment.TopCenter;
-			this.toolStripMenuItem1.Name = "toolStripMenuItem1";
-			this.toolStripMenuItem1.Size = new System.Drawing.Size(180, 22);
-			this.toolStripMenuItem1.Text = "Сохранить";
+			this.saveToolStripMenuItem.ImageAlign = System.Drawing.ContentAlignment.TopCenter;
+			this.saveToolStripMenuItem.Name = "toolStripMenuItem1";
+			this.saveToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+			this.saveToolStripMenuItem.Text = "Сохранить";
 			// 
-			// toolStripMenuItem1ToolStripMenuItem
+			// loadToolStripMenuItem
 			// 
-			this.toolStripMenuItem1ToolStripMenuItem.Name = "toolStripMenuItem1ToolStripMenuItem";
-			this.toolStripMenuItem1ToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-			this.toolStripMenuItem1ToolStripMenuItem.Text = "Загрузить";
+			this.loadToolStripMenuItem.Name = "toolStripMenuItem1ToolStripMenuItem";
+			this.loadToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+			this.loadToolStripMenuItem.Text = "Загрузить";
+			// 
+			// labelPlace
 			//
 			this.labelPlace.AutoSize = true;
 			this.labelPlace.Location = new System.Drawing.Point(27, 36);
@@ -339,12 +341,12 @@ namespace lab4
 			this.maskedTextBox.Size = new System.Drawing.Size(28, 20);
 			this.maskedTextBox.TabIndex = 0;
 			// 
+			// loadDepoDialog
+			// 
+			this.loadDepoDialog.FileName = "openFileDialog1";
+			// 
 			// buttonSetLocomotive
 			// 
-
-
-			this.openFileDialog1.FileName = "openFileDialog1";
-
 			this.buttonSetLocomotive.Location = new System.Drawing.Point(811, 279);
 			this.buttonSetLocomotive.Name = "buttonSetLocomotive";
 			this.buttonSetLocomotive.Size = new System.Drawing.Size(125, 39);
@@ -410,14 +412,14 @@ namespace lab4
 			this.Controls.Add(this.groupBoxDepo);
 			this.Controls.Add(this.pictureBoxDepo);
 
-			this.toolStripMenuItem1.Click += new System.EventHandler(this.toolStripMenuItem1_Click);
-			this.toolStripMenuItem1ToolStripMenuItem.Click += new System.EventHandler(this.toolStripMenuItem1ToolStripMenuItem_Click);
+			this.saveToolStripMenuItem.Click += new System.EventHandler(this.saveToolStripMenuItem_Click);
+			this.loadToolStripMenuItem.Click += new System.EventHandler(this.loa);
 
 
-			this.Controls.Add(this.menuStrip1);
-			this.MainMenuStrip = this.menuStrip1;
-			this.menuStrip1.ResumeLayout(false);
-			this.menuStrip1.PerformLayout();
+			this.Controls.Add(this.depoMenuStrip);
+			this.MainMenuStrip = this.depoMenuStrip;
+			this.depoMenuStrip.ResumeLayout(false);
+			this.depoMenuStrip.PerformLayout();
 			this.Name = "FormDepo";
 			((System.ComponentModel.ISupportInitialize)(this.pictureBoxDepo)).EndInit();
 			this.groupBoxDepo.ResumeLayout(false);

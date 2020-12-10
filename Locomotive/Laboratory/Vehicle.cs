@@ -47,7 +47,7 @@ namespace lab4
 
 			_pictureHeight = height;
 		}
-		public abstract void DrawTransport(Graphics g);
+		public abstract void DrawLocomotive(Graphics g);
 		public abstract void MoveTransport(Direction direction);
 
 		public void SetMainColor(Color color)

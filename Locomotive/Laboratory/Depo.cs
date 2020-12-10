@@ -1,14 +1,12 @@
-﻿using System;
+﻿using System.Collections;
 using System.Collections.Generic;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace lab4
 {
     /// <summary>     /// Параметризованный класс для хранения набора объектов от интерфейса ITransport     /// </summary>     /// <typeparam name="T"></typeparam> 
-    public class Depo<T> where T : class, ITransport
+    public class Depo<T> : IEnumerator<T>, IEnumerable<T>
+        where T : class, ITransport
     {         /// <summary>         /// Массив объектов, которые храним         /// </summary>         
 		private readonly List<T> _places;
 
@@ -25,6 +23,12 @@ namespace lab4
 
         /// <summary>         /// Размер парковочного места (высота)         /// </summary>         
         private readonly int _placeSizeHeight = 100;
+
+
+        private int _currentIndex;
+        public T Current => _places[_currentIndex];
+        object IEnumerator.Current => _places[_currentIndex];
+
         public Depo(int picWidth, int picHeight)
         {
             this.pictureWidth = picWidth;
@@ -33,16 +37,22 @@ namespace lab4
             int height = picHeight / _placeSizeHeight;
             _maxCount = width * height;
             _places = new List<T>();
+            _currentIndex = -1;
 
         }
 
-        public static bool operator +(Depo<T> p, T ElLocomotive)
+        public static bool operator +(Depo<T> p, T locomotive)
         {
             if (p._places.Count >= p._maxCount)
             {
                 throw new DepoOverflowException();
             }
-            p._places.Add(ElLocomotive);
+
+            if (p._places.Contains(locomotive))
+            {
+                throw new DepoAlreadyHaveThisLocomotiveException();
+            }
+            p._places.Add(locomotive);
             return true;
         }
 
@@ -64,7 +74,7 @@ namespace lab4
             for (int i = 0; i < _places.Count; ++i)
             {
                 _places[i].SetPosition(5 + i / 5 * _placeSizeWidth + 15, i % 5 * _placeSizeHeight + 40, pictureWidth, pictureHeight);
-                _places[i].DrawTransport(g);
+                _places[i].DrawLocomotive(g);
             }
         }
 
@@ -90,6 +100,32 @@ namespace lab4
                 return null;
             }
             return _places[index];
+        }
+        public void Sort() => _places.Sort((IComparer<T>)new LocomotiveComparer());
+
+        public void Dispose()
+        {
+        }
+
+        public bool MoveNext()
+        {
+            _currentIndex++;
+            return (_currentIndex < _places.Count);
+        }
+
+        public void Reset()
+        {
+            _currentIndex = -1;
+        }
+
+        public IEnumerator<T> GetEnumerator()
+        {
+            return this;
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return this;
         }
     }
 

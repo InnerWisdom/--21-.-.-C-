@@ -26,6 +26,6 @@ namespace lab4
 		/// Отрисовка
 		/// </summary>
 		/// <param name="g"></param>
-		void DrawTransport(Graphics g);
+		void DrawLocomotive(Graphics g);
 	}
 }
