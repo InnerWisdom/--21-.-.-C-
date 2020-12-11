@@ -304,7 +304,7 @@ namespace lab4
 			// 
 			this.buttonSortLocomotives.Location = new System.Drawing.Point(822, 350);
 			this.buttonSortLocomotives.Name = "buttonTakeLocomotive";
-			this.buttonSortLocomotives.Size = new System.Drawing.Size(72, 19);
+			this.buttonSortLocomotives.Size = new System.Drawing.Size(92, 29);
 			this.buttonSortLocomotives.TabIndex = 2;
 			this.buttonSortLocomotives.Text = "Сортировка";
 			this.buttonSortLocomotives.UseVisualStyleBackColor = true;
