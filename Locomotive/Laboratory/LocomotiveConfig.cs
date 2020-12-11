@@ -30,7 +30,7 @@ namespace lab4
                 Bitmap bmp = new Bitmap(pictureBoxLocomotive.Width, pictureBoxLocomotive.Height);
                 Graphics gr = Graphics.FromImage(bmp);
                 locomotive.SetPosition(12, 30, pictureBoxLocomotive.Width, pictureBoxLocomotive.Height);
-                locomotive.DrawTransport(gr);
+                locomotive.DrawLocomotive(gr);
                 pictureBoxLocomotive.Image = bmp;
             }
         }

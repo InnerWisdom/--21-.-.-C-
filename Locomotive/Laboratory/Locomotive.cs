@@ -3,7 +3,7 @@ using System.Drawing;
 
 namespace lab4
 {
-	public class Locomotive : Vehicle
+	public class Locomotive : Vehicle, IEquatable<Locomotive>
 	{
 		protected readonly int locomotiveWidth = 90;
 		protected readonly int locomotiveHeight = 50;
@@ -66,7 +66,7 @@ namespace lab4
 					break;
 			}
 		}
-		public override void DrawTransport(Graphics g)
+		public override void DrawLocomotive(Graphics g)
 		{
 			Pen pen = new Pen(Color.Black);
 			Brush br_main = new SolidBrush(MainColor);
@@ -97,5 +97,45 @@ namespace lab4
 			return $"{MaxSpeed}{separator}{Weight}{separator}{MainColor.Name}";
 		}
 
+		public bool Equals(Locomotive otherLocomotive)
+		{
+			if (otherLocomotive == null)
+			{
+				return false;
+			}
+			if (GetType().Name != otherLocomotive.GetType().Name)
+			{
+				return false;
+			}
+			if (MaxSpeed != otherLocomotive.MaxSpeed)
+			{
+				return false;
+			}
+			if (Weight != otherLocomotive.Weight)
+			{
+				return false;
+			}
+			if (MainColor != otherLocomotive.MainColor)
+			{
+				return false;
+			}
+			return true;
+		}
+
+		public override bool Equals(Object obj)
+		{
+			if (obj == null)
+			{
+				return false;
+			}
+			if (!(obj is Locomotive locomotiveObj))
+			{
+				return false;
+			}
+			else
+			{
+				return Equals(locomotiveObj);
+			}
+		}
 	}
 }
